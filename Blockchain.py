@@ -6,15 +6,17 @@ class Block:
         self.index = index
         self.timestamp = timestamp
         self.data = data
-        self.hash = self.hash_block()
+        self.previous_hash = previous_hash
+        self.hash = self.hash_block().encode('utf8')
 
-        def hash_block(self):
-            sha = hashlib.sha256()
-            sha.update(str(self.index) +
-                   str(self.timestamp) +
-                   str(self.data) +
-                   str(self.previous_hash))
-            return sha.hexdigest()
+    def hash_block(self):
+        sha = hashlib.sha256()
+        blkstr = (str(self.index) +
+                  str(self.timestamp) +
+                  str(self.data) +
+                  str(self.previous_hash))
+        sha.update(blkstr.encode('utf-8'))
+        return sha.hexdigest()
 
 
 #Genesis block creator
@@ -28,3 +30,18 @@ def next_block(last_block):
     this_data = "Block " + str (this_index)
     this_hash = last_block.hash
     return Block(this_index, this_timestamp, this_data, this_hash)
+
+
+#Code for running the blockchain
+blockchain = [create_genesis_block()]
+previous_block = blockchain[0]
+
+genesis_blocks_qty = 10
+
+#adding blocks in the whole chain
+for i in range(0, genesis_blocks_qty):
+    block_to_add = next_block(previous_block)
+    blockchain.append(block_to_add)
+    previous_block = block_to_add
+    print ("Block #", block_to_add.index, " added")
+    print ("Hash: ", block_to_add.hash)
