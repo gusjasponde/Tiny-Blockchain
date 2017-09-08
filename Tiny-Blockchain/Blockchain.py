@@ -1,4 +1,6 @@
 import hashlib
+import json
+import datetime
 
 #Defining the block into our blockchain
 class Block:
@@ -20,14 +22,16 @@ class Block:
 
 
 #Genesis block creator
-import datetime
 def create_genesis_block():
     return Block(0, datetime.datetime.now(), "Genesis block", "0")
 
 def next_block(last_block):
     this_index = last_block.index + 1
     this_timestamp = datetime.datetime.now()
-    this_data = "Block " + str (this_index)
+    this_data = json.dumps({
+        "proof-of-work": this_index,
+        "transactions": "Initial block"
+    })
     this_hash = last_block.hash
     return Block(this_index, this_timestamp, this_data, this_hash)
 
