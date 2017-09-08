@@ -1,4 +1,4 @@
-#   transcation format
+#   transcation formattranscation_list
 #   {
 #       "from": "<public-key>"
 #       "to": "<public-key>"
@@ -7,25 +7,25 @@
 import Blockchain
 from flask import Flask
 from flask import request
+from flask import Blueprint
 
-node = Flask(__name__)
+#Exporting blueprint
+transact_api = Blueprint('transact_api', __name__)
 
 #Store transactions
-transcation_list = []
+transaction_list = []
 
-@node.route('/transact', methods=['POST'])
+@transact_api.route('/transact', methods=['POST'])
 def transaction():
     if request.method == 'POST':
         #get all the data from transaction
         new_transaction = request.get_json()
 
         #add transaction to the list
-        transcation_list.append(new_transaction)
+        transaction_list.append(new_transaction)
         print("Transcaction included")
         print("Sender:   ", str(new_transaction['from']))
         print("Receiver: ", str(new_transaction['to']))
         print("Amount:   ", str(new_transaction['amount']))
 
         return "Submition successful\n"
-
-node.run()
