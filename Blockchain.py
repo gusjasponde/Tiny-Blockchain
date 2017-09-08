@@ -16,3 +16,15 @@ class Block:
                    str(self.previous_hash))
             return sha.hexdigest()
 
+
+#Genesis block creator
+import datetime
+def create_genesis_block():
+    return Block(0, datetime.datetime.now(), "Genesis block", "0")
+
+def next_block(last_block):
+    this_index = last_block.index + 1
+    this_timestamp = datetime.datetime.now()
+    this_data = "Block " + str (this_index)
+    this_hash = last_block.hash
+    return Block(this_index, this_timestamp, this_data, this_hash)
