@@ -7,7 +7,7 @@ from flask import Blueprint
 consensus_api = Blueprint('consensus_api', __name__)
 
 @consensus_api.route('/chain', methods=['GET'])
-def get_blocks():
+def get_chain():
     chain_to_send = blockchain
 
     #Blocks become dictionaries
@@ -26,3 +26,17 @@ def get_blocks():
     #Send our requested chain
     chain_to_send = json.dumps(chain_to_send)
     return chain_to_send
+
+def find_new_chains():
+    #Get others nodes blockchains
+    other_chains = []
+    for node_url in peer_nodes:
+        block = requests.get(node_url + "/blocks").content
+
+        #Converting Json to dictionary for easy
+        #manipulation
+        block = json.loads(block)
+
+        #add to chains list
+        other_chains.append(block)
+    return other_chains
