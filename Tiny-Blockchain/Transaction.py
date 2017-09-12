@@ -1,13 +1,16 @@
 #   transcation formattranscation_list
 #   {
-#       "from": "<public-key>"
-#       "to": "<public-key>"
+#       "sender": "<public-key>"
+#       "receiver": "<public-key>"
 #       "amount" : value
 #   }
 import Blockchain
 from flask import Flask
 from flask import request
 from flask import Blueprint
+from flask import json
+from flask import jsonify
+from Util import ComplexEncoder
 
 #Exporting blueprint
 transact_api = Blueprint('transact_api', __name__)
@@ -28,14 +31,13 @@ class Transaction:
 def transaction():
     if request.method == 'POST':
         #get all the data from transaction
-        new_transaction = json.loads(request.get_json())
-
+        new_transaction = request.get_json()
         #add transaction to the list
         transaction_list.append(
         json.dumps(
             Transaction(
-                new_transaction['sender'], new_transaction['receiver'], new_transaction['amount']
-                ).reprJson(),
+                new_transaction["sender"], new_transaction["receiver"], new_transaction["amount"]
+                ).reprJSON(),
             cls=ComplexEncoder)
         )
 
