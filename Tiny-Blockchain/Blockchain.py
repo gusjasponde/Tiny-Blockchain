@@ -1,6 +1,7 @@
 import hashlib
 import json
 import datetime
+import Util
 
 #Defining the block into our blockchain
 class Block:
@@ -20,9 +21,8 @@ class Block:
         sha.update(blkstr.encode('utf-8'))
         return sha.hexdigest()
 
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-            sort_keys=True, indent=3)
+    def reprJSON(self):
+        return dict(index=self.index, timestamp=self.timestamp, data=self.data, previous_hash=self.previous_hash, hash=self.hash)
 
 #Genesis block creator
 def create_genesis_block():

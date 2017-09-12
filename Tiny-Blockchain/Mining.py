@@ -58,4 +58,4 @@ def mine():
     blockchain.append(mined_block)
 
     #Response for new block mined
-    return json.dumps(mined_block.toJson()) + "\n"
+    return json.dumps(mined_block.reprJSON()) + "\n"
