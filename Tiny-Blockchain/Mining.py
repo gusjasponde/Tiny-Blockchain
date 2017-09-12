@@ -26,8 +26,7 @@ def deb():
 def mine():
     #Last proof of work
     last_block = blockchain[len(blockchain) - 1]
-    last_data = json.loads(last_block.data)
-    last_proof = last_data['proof-of-work']
+    last_proof = json.loads(last_block.data)['proof-of-work']
 
     #The program will be stuck here
     #until a new valid proof of work
@@ -45,19 +44,16 @@ def mine():
         "proof-of-work": proof,
         "transactions": list(transaction_list)
     })
-    new_block_index = last_block.index + 1
-    new_block_timestamp = this_timestamp = datetime.datetime.now()
-    last_block_hash = last_block.hash
 
     #Clear the transaction list
     transaction_list[:] = []
 
     #New block
     mined_block = Block(
-        new_block_index,
-        new_block_timestamp,
+        last_block.index + 1,
+        datetime.datetime.now(),
         new_block_data,
-        last_block_hash
+        last_block.hash
     )
     blockchain.append(mined_block)
 

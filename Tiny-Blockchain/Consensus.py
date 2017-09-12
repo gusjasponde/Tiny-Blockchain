@@ -16,6 +16,7 @@ def get_chain():
     chain_to_send = []
 
     for block in blockchain:
+        shit = block.index
         chain_to_send.append(block.toJson())
 
     #Send our requested chain

@@ -6,14 +6,10 @@ import datetime
 class Block:
     def __init__(self, index, timestamp, data, previous_hash):
         self.index = index
-        self.timestamp = timestamp
+        self.timestamp = timestamp.isoformat()
         self.data = data
         self.previous_hash = previous_hash
         self.hash = self.hash_block().encode('utf8')
-
-    def __getitem__(self, item):
-        return [self.index, self.timestamp,
-        self.data, self.previous_hash, self.hash][item]
 
     def hash_block(self):
         sha = hashlib.sha256()
@@ -25,7 +21,6 @@ class Block:
         return sha.hexdigest()
 
     def toJson(self):
-        self.timestamp = self.timestamp.isoformat()
         return json.dumps(self, default=lambda o: o.__dict__,
             sort_keys=True, indent=3)
 
@@ -34,14 +29,11 @@ def create_genesis_block():
     return Block(0, datetime.datetime.now(), "Genesis block", "0")
 
 def next_block(last_block):
-    this_index = last_block.index + 1
-    this_timestamp = datetime.datetime.now()
     this_data = json.dumps({
-        "proof-of-work": this_index,
+        "proof-of-work": last_block.index + 1,
         "transactions": "Initial block"
     })
-    this_hash = last_block.hash
-    return Block(this_index, this_timestamp, this_data, this_hash)
+    return Block(last_block.index + 1, datetime.datetime.now(), this_data, last_block.hash)
 
 
 #Code for running the blockchain

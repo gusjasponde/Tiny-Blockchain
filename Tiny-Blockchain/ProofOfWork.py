@@ -6,7 +6,7 @@
 
 def proof_of_work(last_proof):
     incrementor = last_proof + 1
-    while not(incrementor % 23 == 0 and incrementor % last_proof == 0):
+    while not(incrementor % 2 == 0 and incrementor % last_proof == 0):
         incrementor += 1
 
     return incrementor #as proof of work
