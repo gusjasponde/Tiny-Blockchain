@@ -15,17 +15,33 @@ transact_api = Blueprint('transact_api', __name__)
 #Store transactions
 transaction_list = []
 
+class Transaction:
+    def __init__(self, sender, receiver, amount):
+        self.sender = sender
+        self.receiver = receiver
+        self.amount = amount
+
+    def reprJSON(self):
+        return dict(sender=self.sender, receiver=self.receiver, amount=self.amount)
+
 @transact_api.route('/transact', methods=['POST'])
 def transaction():
     if request.method == 'POST':
         #get all the data from transaction
-        new_transaction = request.get_json()
+        new_transaction = json.loads(request.get_json())
 
         #add transaction to the list
-        transaction_list.append(new_transaction)
+        transaction_list.append(
+        json.dumps(
+            Transaction(
+                new_transaction['sender'], new_transaction['receiver'], new_transaction['amount']
+                ).reprJson(),
+            cls=ComplexEncoder)
+        )
+
         print("Transcaction included")
-        print("Sender:   ", str(new_transaction['from']))
-        print("Receiver: ", str(new_transaction['to']))
+        print("Sender:   ", str(new_transaction['sender']))
+        print("Receiver: ", str(new_transaction['receiver']))
         print("Amount:   ", str(new_transaction['amount']))
 
         return "Submition successful\n"

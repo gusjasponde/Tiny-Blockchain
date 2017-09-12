@@ -6,6 +6,8 @@ from flask import request
 from flask import Blueprint
 
 import json
+import Util
+from Util import ComplexEncoder
 
 #Exporting blueprint
 consensus_api = Blueprint('consensus_api', __name__)
@@ -20,7 +22,7 @@ def get_chain():
         chain_to_send.append(block.reprJSON())
 
     #Send our requested chain
-    return json.dumps(chain_to_send)
+    return json.dumps(chain_to_send, cls=ComplexEncoder)
 
 def find_new_chains():
     #Get others nodes blockchains

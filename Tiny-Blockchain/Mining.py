@@ -2,6 +2,7 @@
 
 from ProofOfWork import proof_of_work
 from Transaction import transaction_list
+from Transaction import Transaction
 from Blockchain import blockchain
 from Blockchain import Block
 
@@ -11,6 +12,7 @@ from flask import Blueprint
 
 import json
 import datetime
+from Util import ComplexEncoder
 
 #miner_address
 miner_address = "d2958a8e0a1d2ff69c9c74c4e2e1467a3c157d926457345fa4ee2a39e909ba99"
@@ -36,14 +38,14 @@ def mine():
     #Once the proof is valid, new block
     #can be added and miner can be rewarded
     transaction_list.append(
-        {"from": "network-reward", "to": miner_address, "amount" : 1}
+        json.dumps(Transaction("network-reward", miner_address, 1).reprJSON(), cls=ComplexEncoder)
     )
 
     #Data needed to create a new block
     new_block_data = json.dumps({
         "proof-of-work": proof,
-        "transactions": list(transaction_list)
-    })
+        "transactions": json.dumps(list(transaction_list), cls=ComplexEncoder)
+    }, cls=ComplexEncoder)
 
     #Clear the transaction list
     transaction_list[:] = []
@@ -58,4 +60,4 @@ def mine():
     blockchain.append(mined_block)
 
     #Response for new block mined
-    return json.dumps(mined_block.reprJSON()) + "\n"
+    return json.dumps(mined_block.reprJSON(), cls=ComplexEncoder) + "\n"
