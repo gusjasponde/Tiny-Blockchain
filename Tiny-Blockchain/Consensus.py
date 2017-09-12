@@ -12,16 +12,14 @@ consensus_api = Blueprint('consensus_api', __name__)
 
 @consensus_api.route('/chain', methods=['GET'])
 def get_chain():
-    chain_to_send = blockchain
-
     #Blocks become dictionaries
-    for block in chain_to_send:
-        chain_to_send.append(json.loads(block))
-    print chain_to_send
+    chain_to_send = []
+
+    for block in blockchain:
+        chain_to_send.append(block.toJson())
 
     #Send our requested chain
-    chain_to_send = json.dumps(chain_to_send)
-    return chain_to_send
+    return json.dumps(chain_to_send)
 
 def find_new_chains():
     #Get others nodes blockchains
