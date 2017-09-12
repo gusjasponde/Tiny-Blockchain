@@ -1,5 +1,6 @@
 from Transaction import transact_api
 from Mining import mining_api
+from Consensus import consensus_api
 from flask import Flask
 
 #Creating node variable that will be
@@ -11,6 +12,7 @@ app = Flask(__name__)
 
 app.register_blueprint(transact_api)
 app.register_blueprint(mining_api)
+app.register_blueprint(consensus_api)
 
 @app.route("/")
 def response():

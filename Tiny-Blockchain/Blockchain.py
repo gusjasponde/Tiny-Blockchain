@@ -11,6 +11,10 @@ class Block:
         self.previous_hash = previous_hash
         self.hash = self.hash_block().encode('utf8')
 
+    def __getitem__(self, item):
+        return [self.index, self.timestamp,
+        self.data, self.previous_hash, self.hash][item]
+
     def hash_block(self):
         sha = hashlib.sha256()
         blkstr = (str(self.index) +
@@ -20,6 +24,10 @@ class Block:
         sha.update(blkstr.encode('utf-8'))
         return sha.hexdigest()
 
+    def toJson(self):
+        self.timestamp = self.timestamp.isoformat()
+        return json.dumps(self, default=lambda o: o.__dict__,
+            sort_keys=True, indent=3)
 
 #Genesis block creator
 def create_genesis_block():
@@ -47,5 +55,5 @@ for i in range(0, genesis_blocks_qty):
     block_to_add = next_block(previous_block)
     blockchain.append(block_to_add)
     previous_block = block_to_add
-    print ("Block #", block_to_add.index, " added")
-    print ("Hash: ", block_to_add.hash)
+    print "Block #",block_to_add.index," added"
+    print "Hash: ",block_to_add.hash
